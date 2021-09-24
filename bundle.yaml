@@ -1,0 +1,51 @@
+# Copyright 2021 Canonical
+# See LICENSE file for licensing details.
+
+name: finos-legend-bundle
+
+series: kubernetes
+
+services:
+  mongodb-k8s:
+    charm: "mongodb-k8s"
+    channel: "edge"
+    num_units: 1
+
+  finos-legend-db-k8s:
+    charm: "finos-legend-db-k8s"
+    channel: "edge"
+    num_units: 1
+
+  finos-legend-sdlc-k8s:
+    charm: "finos-legend-sdlc-k8s"
+    channel: "edge"
+    num_units: 1
+
+  finos-legend-engine-k8s:
+    charm: "finos-legend-engine-k8s"
+    channel: "edge"
+    num_units: 1
+
+  finos-legend-studio-k8s:
+    charm: "finos-legend-studio-k8s"
+    channel: "edge"
+    num_units: 1
+
+  finos-legend-gitlab-integrator-k8s:
+    charm: "finos-legend-gitlab-integrator-k8s"
+    channel: "edge"
+    num_units: 1
+
+relations:
+  # Legend DB relations:
+  - ["finos-legend-db-k8s", "mongodb-k8s"]
+  - ["finos-legend-sdlc-k8s", "finos-legend-db-k8s"]
+  - ["finos-legend-engine-k8s", "finos-legend-db-k8s"]
+  - ["finos-legend-studio-k8s", "finos-legend-db-k8s"]
+  # Legend GitLab relations:
+  - ["finos-legend-sdlc-k8s", "finos-legend-gitlab-integrator-k8s"]
+  - ["finos-legend-engine-k8s", "finos-legend-gitlab-integrator-k8s"]
+  - ["finos-legend-studio-k8s", "finos-legend-gitlab-integrator-k8s"]
+  # Legend component relations:
+  - ["finos-legend-studio-k8s", "finos-legend-sdlc-k8s"]
+  - ["finos-legend-studio-k8s", "finos-legend-engine-k8s"]
