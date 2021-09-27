@@ -60,12 +60,22 @@ The above should yield a model containing all the Legend apps in either
 ### 2.A: Using private GitLab (recommended)
 
 Prerequisites:
-* a private GitLab deployment
+* a private GitLab deployment configured to use HTTPS
 * a [personal access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) for the GitLab
+* the certificate (`*.der`) for the GitLab deployment
 
 ```bash
+# Convert the certificate to .der if needed:
+openssl x509 \
+  -in /path/to/cert.pem \
+  -outform der \
+  -out /path/to/certfile.der
+
+# Convert the '*.der' into base64:
+CERT=`base64 -w 0 /path/to/certfile.der`
+
 juju config finos-legend-gitlab-integrator-k8s \
-    gitlab-host=10.107.2.9 gitlab-port 443 \
+    gitlab-host=10.107.2.9 gitlab-host-der-b64="$CERT" gitlab-port=443 \
     access-token="CqVrcbHOMeU="
 ```
 
