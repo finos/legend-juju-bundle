@@ -4,11 +4,11 @@ Juju bundle for all the [FINOS Legend](https://legend.finos.org)
 
 The bundle will deploy and relate the following applications:
 * [mongodb-k8s](https://github.com/canonical/mongodb-operator)
-* [finos-legend-db-k8s](https://github.com/aznashwan/legend-database-manager)
-* [finos-legend-gitlab-integrator-k8s](https://github.com/aznashwan/finos-legend-gitlab-integrator-k8s)
-* [finos-legend-sdlc-k8s](https://github.com/aznashwan/legend-sdlc-server-operator)
-* [finos-legend-engine-k8s](https://github.com/aznashwan/legend-engine-server-operator)
-* [finos-legend-studio-k8s](https://github.com/aznashwan/legend-studio-operator)
+* [finos-legend-db-k8s](https://github.com/canonical/finos-legend-db-operator)
+* [finos-legend-gitlab-integrator-k8s](https://github.com/canonical/finos-legend-gitlab-integrator)
+* [finos-legend-sdlc-k8s](https://github.com/canonical/finos-legend-sdlc-server-operator)
+* [finos-legend-engine-k8s](https://github.com/canonical/finos-legend-engine-server-operator)
+* [finos-legend-studio-k8s](https://github.com/canonical/finos-legend-studio-operator/pull/1)
 
 ## 0. MicroK8s and Juju setup
 
@@ -36,6 +36,7 @@ microk8s status
 #### Juju setup:
 
 ```bash
+sudo snap install juju --classic
 juju bootstrap microk8s micro
 
 # This may take a while, check the status using:
