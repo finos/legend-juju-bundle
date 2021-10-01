@@ -1,1 +1,4 @@
 type: bundle
+parts:
+  bundle:
+    prime: ["README.md", "icon.svg"]
