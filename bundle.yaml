@@ -13,27 +13,27 @@ applications:
 
   finos-legend-db-k8s:
     charm: "finos-legend-db-k8s"
-    channel: "stable"
+    channel: "beta"
     scale: 1
 
   finos-legend-sdlc-k8s:
     charm: "finos-legend-sdlc-k8s"
-    channel: "stable"
+    channel: "beta"
     scale: 1
 
   finos-legend-engine-k8s:
     charm: "finos-legend-engine-k8s"
-    channel: "stable"
+    channel: "beta"
     scale: 1
 
   finos-legend-studio-k8s:
     charm: "finos-legend-studio-k8s"
-    channel: "stable"
+    channel: "beta"
     scale: 1
 
   finos-legend-gitlab-integrator-k8s:
     charm: "finos-legend-gitlab-integrator-k8s"
-    channel: "stable"
+    channel: "beta"
     scale: 1
 
 relations:
