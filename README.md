@@ -63,21 +63,10 @@ The above should yield a model containing all the Legend apps in either
 Prerequisites:
 * a private GitLab deployment configured to use HTTPS
 * a [personal access token](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html) for the GitLab
-* the certificate (`*.der`) for the GitLab deployment
 
 ```bash
-# Convert the certificate to .der if needed:
-openssl x509 \
-  -in /path/to/cert.pem \
-  -outform der \
-  -out /path/to/certfile.der
-
-# Convert the '*.der' into base64:
-CERT=`base64 -w 0 /path/to/certfile.der`
-
 juju config finos-legend-gitlab-integrator-k8s \
-    gitlab-host=10.107.2.9 gitlab-host-der-b64="$CERT" gitlab-port=443 \
-    access-token="CqVrcbHOMeU="
+    gitlab-host="<GitLab IP or hostname>" gitlab-port=443 access-token="CqVrcbHOMeU="
 ```
 
 ### 2.B: Using pre-created GitLab application
@@ -138,3 +127,19 @@ timing:
 * edit the Redirect URI setting of the application
 * paste the output of the `result` field from the `juju show-action-output`
   command run previously
+
+### GitLab application reconfiguration or reuse:
+
+Due to intentional security-minded limitations in the GitLab APIs, the client ID and
+secret of existing applications cannot be queried programatically, and can only be known
+if creating an application on the spot.
+
+In this sense, reusing GitLab applications upon redeploying the integrator will
+require taking one of the following options:
+1. *reusing an existing GitLab application* can be achieved by reconfiguring the
+   charm using the `bypass-client-id` and `bypass-client-secret` configuration
+   options with the client ID/secret which can be obtained from
+   the GitLab Web user interface as described in section 2.B above.
+2. manually deleting the application and having the integrator create a new one on the next run
+3. reconfiguring the integrator with the `application-name` config option to create a new
+   application with a different name. Note that this does NOT clean up/replace the old app.
