@@ -1,3 +1,5 @@
+[![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
+
 # finos-legend-k8s-bundle
 Juju bundle for all the [FINOS Legend](https://legend.finos.org)
 [Juju](https://juju.is) Charmed operators on Kubernetes.
@@ -143,3 +145,17 @@ require taking one of the following options:
 2. manually deleting the application and having the integrator create a new one on the next run
 3. reconfiguring the integrator with the `application-name` config option to create a new
    application with a different name. Note that this does NOT clean up/replace the old app.
+
+## Contributing
+
+Visit Legend [Contribution Guide](https://github.com/finos/legend/blob/master/CONTRIBUTING.md) to learn how to contribute to Legend.
+
+## License
+
+Copyright (c) 2021-present, Canonical
+
+Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+SPDX-License-Identifier: [Apache-2.0](https://spdx.org/licenses/Apache-2.0)
+
+
