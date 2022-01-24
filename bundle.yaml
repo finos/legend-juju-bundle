@@ -6,46 +6,46 @@ name: finos-legend-bundle
 bundle: kubernetes
 
 applications:
-  mongodb-k8s:
+  mongodb:
     charm: "mongodb-k8s"
     channel: "edge"
     scale: 1
 
-  finos-legend-db-k8s:
+  legend-db:
     charm: "finos-legend-db-k8s"
     channel: "edge"
     scale: 1
 
-  finos-legend-sdlc-k8s:
+  legend-sdlc:
     charm: "finos-legend-sdlc-k8s"
     channel: "edge"
     scale: 1
 
-  finos-legend-engine-k8s:
+  legend-engine:
     charm: "finos-legend-engine-k8s"
     channel: "edge"
     scale: 1
 
-  finos-legend-studio-k8s:
+  legend-studio:
     charm: "finos-legend-studio-k8s"
     channel: "edge"
     scale: 1
 
-  finos-legend-gitlab-integrator-k8s:
+  gitlab-integrator:
     charm: "finos-legend-gitlab-integrator-k8s"
     channel: "edge"
     scale: 1
 
 relations:
   # Legend DB relations:
-  - ["finos-legend-db-k8s", "mongodb-k8s"]
-  - ["finos-legend-sdlc-k8s", "finos-legend-db-k8s"]
-  - ["finos-legend-engine-k8s", "finos-legend-db-k8s"]
-  - ["finos-legend-studio-k8s", "finos-legend-db-k8s"]
+  - ["legend-db", "mongodb"]
+  - ["legend-sdlc", "legend-db"]
+  - ["legend-engine", "legend-db"]
+  - ["legend-studio", "legend-db"]
   # Legend GitLab relations:
-  - ["finos-legend-sdlc-k8s", "finos-legend-gitlab-integrator-k8s"]
-  - ["finos-legend-engine-k8s", "finos-legend-gitlab-integrator-k8s"]
-  - ["finos-legend-studio-k8s", "finos-legend-gitlab-integrator-k8s"]
+  - ["legend-sdlc", "gitlab-integrator"]
+  - ["legend-engine", "gitlab-integrator"]
+  - ["legend-studio", "gitlab-integrator"]
   # Legend component relations:
-  - ["finos-legend-studio-k8s", "finos-legend-sdlc-k8s"]
-  - ["finos-legend-studio-k8s", "finos-legend-engine-k8s"]
+  - ["legend-studio", "legend-sdlc"]
+  - ["legend-studio", "legend-engine"]
