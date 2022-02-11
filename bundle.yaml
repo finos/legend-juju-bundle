@@ -36,21 +36,9 @@ applications:
     channel: "edge"
     scale: 1
 
-  ingress-sdlc:
+  legend-ingress:
     charm: "nginx-ingress-integrator"
-    channel: "stable"
-    scale: 1
-    trust: true
-
-  ingress-engine:
-    charm: "nginx-ingress-integrator"
-    channel: "stable"
-    scale: 1
-    trust: true
-
-  ingress-studio:
-    charm: "nginx-ingress-integrator"
-    channel: "stable"
+    channel: "edge"
     scale: 1
     trust: true
 
@@ -68,6 +56,6 @@ relations:
   - ["legend-studio", "legend-sdlc"]
   - ["legend-studio", "legend-engine"]
   # Nginx Ingress Integrator relations:
-  - ["legend-sdlc", "ingress-sdlc"]
-  - ["legend-engine", "ingress-engine"]
-  - ["legend-studio", "ingress-studio"]
+  - ["legend-sdlc", "legend-ingress"]
+  - ["legend-engine", "legend-ingress"]
+  - ["legend-studio", "legend-ingress"]
