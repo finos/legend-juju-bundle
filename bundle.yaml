@@ -5,6 +5,9 @@ name: finos-legend-bundle
 
 bundle: kubernetes
 
+variables:
+  external-hostname: &external-hostname "legend-host"
+
 applications:
   mongodb:
     charm: "mongodb-k8s"
@@ -20,16 +23,22 @@ applications:
     charm: "finos-legend-sdlc-k8s"
     channel: "edge"
     scale: 1
+    options:
+      external-hostname: *external-hostname
 
   legend-engine:
     charm: "finos-legend-engine-k8s"
     channel: "edge"
     scale: 1
+    options:
+      external-hostname: *external-hostname
 
   legend-studio:
     charm: "finos-legend-studio-k8s"
     channel: "edge"
     scale: 1
+    options:
+      external-hostname: *external-hostname
 
   gitlab-integrator:
     charm: "finos-legend-gitlab-integrator-k8s"
