@@ -1,0 +1,39 @@
+name: FINOS Legend Bundle Test Jobs
+on: [pull_request, push, workflow_dispatch]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: python3 -m pip install tox
+
+      - name: Run linters
+        run: tox -vve lint
+
+  integration-test:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: python -m pip install tox
+
+      - name: Setup operator environment
+        # TODO: change this to charmed-kubernetes/actions-operator@main once
+        # the following issue is addressed:
+        # https://github.com/charmed-kubernetes/actions-operator/issues/32
+        uses: claudiubelu/actions-operator@main
+        with:
+          provider: microk8s
+          microk8s-addons: "storage dns rbac ingress"
+
+      - name: Run integration tests
+        run: |
+          tox -vve integration
