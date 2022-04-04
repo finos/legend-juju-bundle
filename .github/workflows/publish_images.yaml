@@ -44,6 +44,7 @@ jobs:
             img_name="$3"
             release_version="$4"
 
+            release_short=$(echo "${release_version" | cut -d- -f1-2)
             release_file="${GITHUB_WORKSPACE}/legend/releases/${release_version}/manifest.json"
 
             # Getting the release version.
@@ -63,9 +64,7 @@ jobs:
             # Get the last revision number and image revision number and release.
             charm_rev=$(charmcraft revisions "${charm_name}" | awk 'FNR == 2 {print $1}')
             img_rev=$(charmcraft resource-revisions "${charm_name}" "${charm_resource}" | awk 'FNR == 2 {print $1}')
-            # TODO: Currently, we are not able to create new channels automatically. When we can,
-            # uncomment the following command.
-            #charmcraft release "${charm_name}" --revision=${charm_rev} --channel="${release_version}/edge" --resource="${charm_resource}:${img_rev}"
+            charmcraft release "${charm_name}" --revision=${charm_rev} --channel="${release_short}/edge" --resource="${charm_resource}:${img_rev}"
 
             # Also release it as the latest.
             charmcraft release "${charm_name}" --revision=${charm_rev} --channel=edge --resource="${charm_resource}:${img_rev}"
