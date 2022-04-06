@@ -146,6 +146,10 @@ require taking one of the following options:
 3. reconfiguring the integrator with the `application-name` config option to create a new
    application with a different name. Note that this does NOT clean up/replace the old app.
 
+## Automatic FINOS Legend image updates
+
+This repository has a [Github action](.github/workflows/publish_images.yaml) configured to check if any new [FINOS Legend releases](https://github.com/finos/legend) have been published. If so, the Github action will pull the FINOS Legend Engine, SDLC, and Studio images defined in the release's ``manifest.josn`` file, pull them, upload them into Charmhub, and release the Legend Charms with those image revisions. For more information on the Github action and how it se set up, see [here](docs/CharmhubPublishing.md).
+
 ## Contributing
 
 Visit Legend [Contribution Guide](https://github.com/finos/legend/blob/master/CONTRIBUTING.md) to learn how to contribute to Legend.

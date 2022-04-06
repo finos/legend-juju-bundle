@@ -1,0 +1,92 @@
+name: Publish Legend Images
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs everyday at 00:00. (see https://crontab.guru)
+    - cron: '0 0 * * *'
+
+jobs:
+  publish-images:
+    name: Publish Legend Images
+    runs-on: ubuntu-20.04
+    env:
+      CHARMCRAFT_AUTH: "${{ secrets.CHARMCRAFT_AUTH }}"
+      GH_TOKEN: "${{ secrets.GH_TOKEN }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: edge
+          fetch-depth: 0
+
+      - name: Checkout the FINOS Legend repo
+        uses: actions/checkout@v3
+        with:
+          repository: claudiubelu/legend
+          path: legend
+
+      - name: Install Docker
+        uses: docker-practice/actions-setup-docker@master
+
+      - name: Install Dependencies
+        run: |
+          sudo snap install jq
+          sudo snap install charmcraft --classic
+
+      - name: Upload Docker images to Charmhub
+        run: |
+          set -x
+
+          release_charm_with_image(){
+            charm_name="$1"
+            charm_resource="$2"
+            img_name="$3"
+            release_version="$4"
+
+            release_file="${GITHUB_WORKSPACE}/legend/releases/${release_version}/manifest.json"
+
+            # Getting the release version.
+            img_version=$(cat "${release_file}" | jq --raw-output ".core.\"${img_name}\"")
+
+            # Pulling the image.
+            image="${img_name}:${img_version}"
+            docker pull "${image}"
+
+            # Get the image SHA.
+            image_sha=$(docker inspect --format '{{ .Id }}' ${image})
+
+            # Upload image to Charmhub. CHARMCRAFT_AUTH should be loaded in the environment, and
+            # it should have sufficient permissions to push the resource.
+            charmcraft upload-resource --quiet "${charm_name}" "${charm_resource}" --image=${image_sha}
+
+            # Get the last revision number and image revision number and release.
+            charm_rev=$(charmcraft revisions "${charm_name}" | awk 'FNR == 2 {print $1}')
+            img_rev=$(charmcraft resource-revisions "${charm_name}" "${charm_resource}" | awk 'FNR == 2 {print $1}')
+            # TODO: Currently, we are not able to create new channels automatically. When we can,
+            # uncomment the following command.
+            #charmcraft release "${charm_name}" --revision=${charm_rev} --channel="${release_version}/edge" --resource="${charm_resource}:${img_rev}"
+
+            # Also release it as the latest.
+            charmcraft release "${charm_name}" --revision=${charm_rev} --channel=edge --resource="${charm_resource}:${img_rev}"
+          }
+
+          # Treat releases newer than 2022.04.01.
+          for release in $(ls $GITHUB_WORKSPACE/legend/releases/ | gawk '{ if ($1 > "2022-04-01") { print } }')
+          do
+            echo "Treating ${release}..."
+            # If the current release was already published, skip.
+            if git show-ref --verify --quiet "refs/heads/release-${release}"
+            then
+              continue
+            fi
+
+            release_charm_with_image finos-legend-studio-k8s studio-image finos/legend-studio "${release}"
+            release_charm_with_image finos-legend-engine-k8s engine-image finos/legend-engine-server "${release}"
+            release_charm_with_image finos-legend-sdlc-k8s sdlc-image finos/legend-sdlc-server "${release}"
+
+            # Dispatch the create-release.yaml workflow, which will create the release branch,
+            # create a commit that will make bundle.yaml point towards this release, and publish
+            # the bundle into Charmhub.
+            gh workflow run create_release.yaml -f release="${release}"
+          done
