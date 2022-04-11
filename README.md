@@ -52,7 +52,15 @@ juju add-model legend
 After setting up Juju on the Kubernetes of your choice:
 ```bash
 # Deploy the bundle:
-juju deploy finos-legend-bundle
+juju deploy finos-legend-bundle --channel=edge
+```
+
+The above command will deploy the latest application bundle published.
+You can deploy a specific version based on a [FINOS Legend release](https://github.com/finos/legend)
+by its year and month (newer than 2022.04.01):
+
+```bash
+juju deploy finos-legend-bundle --channel=2022-04/edge
 ```
 
 The above should yield a model containing all the Legend apps in either
