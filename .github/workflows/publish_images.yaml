@@ -23,7 +23,7 @@ jobs:
       - name: Checkout the FINOS Legend repo
         uses: actions/checkout@v3
         with:
-          repository: claudiubelu/legend
+          repository: finos/legend
           path: legend
 
       - name: Install Docker
@@ -44,7 +44,7 @@ jobs:
             img_name="$3"
             release_version="$4"
 
-            release_short=$(echo "${release_version" | cut -d- -f1-2)
+            release_short=$(echo "${release_version}" | cut -d- -f1-2)
             release_file="${GITHUB_WORKSPACE}/legend/releases/${release_version}/manifest.json"
 
             # Getting the release version.
