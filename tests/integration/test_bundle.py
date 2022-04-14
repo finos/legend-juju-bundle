@@ -3,8 +3,6 @@
 # See LICENSE file for licensing details.
 
 import logging
-import os
-import sys
 
 import pytest
 import requests
@@ -39,15 +37,8 @@ APP_ROUTES = {
     STUDIO_APP_NAME: "/studio",
 }
 
-GITLAB_CLIENT_ID = os.getenv("GITLAB_CLIENT_ID")
-GITLAB_CLIENT_SECRET = os.getenv("GITLAB_CLIENT_SECRET")
-
-if not all([GITLAB_CLIENT_ID, GITLAB_CLIENT_SECRET]):
-    logger.fatal(
-        "Cannot run the integration tests without GITLAB_CLIENT_ID and GITLAB_CLIENT_SECRET "
-        "environment variables. They are required for the FINOS Legend authentication."
-    )
-    sys.exit(1)
+GITLAB_CLIENT_ID = "fake-client-id"
+GITLAB_CLIENT_SECRET = "fake-client-secret"
 
 
 async def cli_deploy_bundle(ops_test, name):

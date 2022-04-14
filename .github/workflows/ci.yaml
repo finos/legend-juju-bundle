@@ -35,8 +35,5 @@ jobs:
           microk8s-addons: "storage dns rbac ingress"
 
       - name: Run integration tests
-        env:
-          GITLAB_CLIENT_ID: "${{ secrets.GITLAB_CLIENT_ID }}"
-          GITLAB_CLIENT_SECRET: "${{ secrets.GITLAB_CLIENT_SECRET }}"
         run: |
           tox -vve integration
