@@ -83,6 +83,7 @@ jobs:
           CHARMCRAFT_AUTH: "${{ secrets.CHARMCRAFT_AUTH }}"
         run: |
           charmcraft pack
+          charmcraft whoami
           charmcraft upload finos-legend-bundle.zip
           # Get the last revision number and image revision number and release.
           bundle_rev=$(charmcraft revisions finos-legend-bundle | awk 'FNR == 2 {print $1}')
