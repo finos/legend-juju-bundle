@@ -77,22 +77,14 @@ jobs:
           new_branch: "release-${{ github.event.inputs.release }}"
 
       - name: Upload bundle to edge
-        uses: canonical/charming-actions/upload-bundle@1.0.2
-        with:
-          credentials: "${{ secrets.CHARMCRAFT_AUTH }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          channel: "${{ steps.release-short.outputs.short_version }}/edge"
-
-
-      #- name: Upload bundle to edge
-      #  # TODO: replace with  canonical/charming-actions/upload-bundle once the following issue
-      #  # is resolved: https://github.com/canonical/charming-actions/issues/40
-      #  env:
-      #    CHARMCRAFT_AUTH: "${{ secrets.CHARMCRAFT_AUTH }}"
-      #  run: |
-      #    charmcraft pack
-      #    charmcraft whoami
-      #    charmcraft upload finos-legend-bundle.zip --verbose
-      #    # Get the last revision number and image revision number and release.
-      #    bundle_rev=$(charmcraft revisions finos-legend-bundle | awk 'FNR == 2 {print $1}')
-      #    charmcraft release finos-legend-bundle --revision=${bundle_rev} --channel="${{ steps.release-short.outputs.yyyy_mm }}/edge" --verbose
+        # TODO: replace with  canonical/charming-actions/upload-bundle once the following issue
+        # is resolved: https://github.com/canonical/charming-actions/issues/40
+        env:
+          CHARMCRAFT_AUTH: "${{ secrets.CHARMCRAFT_AUTH }}"
+        run: |
+          charmcraft pack
+          charmcraft whoami
+          charmcraft upload finos-legend-bundle.zip --verbose
+          # Get the last revision number and image revision number and release.
+          bundle_rev=$(charmcraft revisions finos-legend-bundle | awk 'FNR == 2 {print $1}')
+          charmcraft release finos-legend-bundle --revision=${bundle_rev} --channel="${{ steps.release-short.outputs.yyyy_mm }}/edge" --verbose
