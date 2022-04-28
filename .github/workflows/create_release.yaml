@@ -84,7 +84,7 @@ jobs:
         run: |
           charmcraft pack
           charmcraft whoami
-          charmcraft upload finos-legend-bundle.zip
+          charmcraft upload finos-legend-bundle.zip --verbose
           # Get the last revision number and image revision number and release.
           bundle_rev=$(charmcraft revisions finos-legend-bundle | awk 'FNR == 2 {print $1}')
-          charmcraft release finos-legend-bundle --revision=${bundle_rev} --channel="${{ steps.release-short.outputs.yyyy_mm }}/edge"
+          charmcraft release finos-legend-bundle --revision=${bundle_rev} --channel="${{ steps.release-short.outputs.yyyy_mm }}/edge" --verbose
