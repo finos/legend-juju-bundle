@@ -43,6 +43,11 @@ jobs:
 
       - name: Update bundle.yaml
         run: |
+          echo "  legend-studio:"
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/edge"
+          echo "    resources:"
+          echo "      studio-image: ${{ github.event.inputs.studio_image }}" 
+          
           # Create an overlay yaml file with the desired release version for Legend Engine,
           # SDLC, and Studio, and apply it over the bundle.yaml file.
           overlay_file="overlay-$${{ github.event.inputs.release }}.yaml"
