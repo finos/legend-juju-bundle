@@ -57,7 +57,7 @@ jobs:
           echo "    resources:" >> $overlay_file
           echo "      engine-image: ${{ github.event.inputs.engine_image }}" >> $overlay_file
           echo "  legend-sdlc:" >> $overlay_file
-          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}" }}/edge" >> $overlay_file
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/edge" >> $overlay_file
           echo "    resources:" >> $overlay_file
           echo "      sdlc-image: ${{ github.event.inputs.sdlc_image }}" >> $overlay_file
           echo "  legend-studio:" >> $overlay_file
