@@ -94,8 +94,9 @@ jobs:
             engine_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-engine-server\"")
             sdlc_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-sdlc-server\"")
             studio_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-studio\"")
-            gh workflow run create_release.yaml -f release="${release}" \
-              -f engine-image="finos/legend-engine-server:${engine_version}" \
-              -f sdlc-image="finos/legend-sdlc-server:${sdlc_version}" \
-              -f studio-image="finos/legend-studio:${studio_version}"
+           gh workflow run create_release.yaml -f release="${release}"
+           # gh workflow run create_release.yaml -f release="${release}" \
+           #   -f engine-image="finos/legend-engine-server:${engine_version}" \
+           #   -f sdlc-image="finos/legend-sdlc-server:${sdlc_version}" \
+           #   -f studio-image="finos/legend-studio:${studio_version}"
           done
