@@ -74,8 +74,8 @@ jobs:
           for release in $(ls $GITHUB_WORKSPACE/legend/releases/ | gawk '{ if ($1 > "2022-04-01") { print } }')
           do
             echo "Treating ${release}..."
-            # If the current release was already published, skip.
-            echo Does release-${release} exist? $(git show-ref --verify --quiet "refs/heads/release-${release})
+            # If the current release was already published, skip it.
+            echo Does release-${release} exist? $(git show-ref --verify --quiet "refs/heads/release-${release}")
             if git show-ref --verify --quiet "refs/heads/release-${release}"
             then
               continue
