@@ -65,7 +65,7 @@ jobs:
             charm_rev=$(charmcraft revisions "${charm_name}" | awk 'FNR == 2 {print $1}')
             img_rev=$(charmcraft resource-revisions "${charm_name}" "${charm_resource}" | awk 'FNR == 2 {print $1}')
             charmcraft release "${charm_name}" --revision=${charm_rev} --channel="${release_short}/edge" --resource="${charm_resource}:${img_rev}"
-
+           
             # Also release it as the latest.
             charmcraft release "${charm_name}" --revision=${charm_rev} --channel=edge --resource="${charm_resource}:${img_rev}"
           }
@@ -77,6 +77,7 @@ jobs:
             # If the current release was already published, skip.
             if git show-ref --verify --quiet "refs/heads/release-${release}"
             then
+              echo Release ${release} already published. Skipping it...
               continue
             fi
 
@@ -89,14 +90,23 @@ jobs:
             # the bundle into Charmhub.
             gh workflow run create_release.yaml -f release="${release}"
 
-            # Create an overlay.yaml file for this release.
-           # release_file="${GITHUB_WORKSPACE}/legend/releases/${release}/manifest.json"
-           # engine_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-engine-server\"")
-           # sdlc_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-sdlc-server\"")
-           # studio_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-studio\"")
-           # gh workflow run create_release.yaml -f release="${release}"
-           # gh workflow run create_release.yaml -f release="${release}" \
-           #   -f engine-image="finos/legend-engine-server:${engine_version}" \
-           #   -f sdlc-image="finos/legend-sdlc-server:${sdlc_version}" \
-           #   -f studio-image="finos/legend-studio:${studio_version}"
+            # Wait until the branch is created
+            branch_url_code=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/finos/legend-juju-bundle/tree/release-$test)
+            while [ $branch_url_code -ne 200 ]
+              do
+                branch_url_code=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/finos/legend-juju-bundle/tree/release-$test)
+                echo Waiting for release-$test branch to be created
+                echo $branch_url_code
+                sleep 30
+            done
+
+           # Create an overlay.yaml file for this release.
+           engine_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-engine-server\"")
+           sdlc_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-sdlc-server\"")
+           studio_version=$(cat "${release_file}" | jq --raw-output ".core.\"finos/legend-studio\"")
+           
+           gh workflow run create_overlay.yaml -f release="${release}" \
+             -f engine-image="finos/legend-engine-server:${engine_version}" \
+             -f sdlc-image="finos/legend-sdlc-server:${sdlc_version}" \
+             -f studio-image="finos/legend-studio:${studio_version}"
           done
