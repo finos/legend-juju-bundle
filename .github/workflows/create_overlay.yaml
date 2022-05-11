@@ -31,11 +31,18 @@ jobs:
           yyyy_mm=$(echo ${{ github.event.inputs.release }} | cut -d- -f1-2)
           echo "::set-output name=yyyy_mm::$yyyy_mm"
 
-      - name: Checkout
+      - name: Checkout edge branch
         uses: actions/checkout@v3
         with:
           ref: "edge"
           fetch-depth: 0
+          
+      - name: Checkout release-${{ github.event.inputs.release }} branch
+        uses: actions/checkout@v3
+        with:
+          ref: release-${{ github.event.inputs.release }}
+          fetch-depth: 0
+          clean: false
 
       - name: Install dependencies
         run: |
