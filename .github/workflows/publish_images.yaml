@@ -91,11 +91,11 @@ jobs:
             gh workflow run create_release.yaml -f release="${release}"
 
             # Wait until the branch is created
-            branch_url_code=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/finos/legend-juju-bundle/tree/release-$test)
+            branch_url_code=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/finos/legend-juju-bundle/tree/release-${release})
             while [ $branch_url_code -ne 200 ]
               do
-                branch_url_code=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/finos/legend-juju-bundle/tree/release-$test)
-                echo Waiting for release-$test branch to be created
+                branch_url_code=$(curl -s -o /dev/null -w "%{http_code}" https://github.com/finos/legend-juju-bundle/tree/release-${release})
+                echo Waiting for release-${release} branch to be created
                 echo $branch_url_code
                 sleep 30
             done
