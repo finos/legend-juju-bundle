@@ -76,7 +76,7 @@ jobs:
                     
           do
           
-            if [[ "$release" == $(date +%Y-%m-%d -d "yesterday") ] || ["$release" == "2022-05-05"]] ;          
+            if [[ "$release" == $(date +%Y-%m-%d -d "yesterday") || "$release" == "2022-05-05" ]];          
             then
               echo "Release ${release} is from YESTERDAY and will be uploaded to Charmhub"
             else
