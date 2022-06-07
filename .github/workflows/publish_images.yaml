@@ -77,13 +77,14 @@ jobs:
           do
             echo "Treating ${release}..."
             
-            if $release > "2022-04-01"
+            if [[ "$release" > "2022-04-01" ]] ;          
             then
-              echo "Release ${release} is OLDER"
-            else
               echo "Release ${release} is NEWER"
+            else
+              echo "Release ${release} is OLDER"
+              continue
             fi
-              
+             
             # If the current release was already published, skip it.
             echo Does release-${release} exist? $(git show-ref --verify --quiet "refs/heads/release-${release}")
             if git show-ref --verify --quiet "refs/heads/release-${release}"
