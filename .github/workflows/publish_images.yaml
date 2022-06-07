@@ -71,9 +71,19 @@ jobs:
           }
 
           # Treat releases newer than 2022.04.01.
-          for release in $(ls $GITHUB_WORKSPACE/legend/releases/ | gawk '{ if ($1 > "2022-04-01") { print } }')
+          # for release in $(ls $GITHUB_WORKSPACE/legend/releases/ | gawk '{ if ($1 > "2022-04-01") { print } }')
+          for release in $(ls $GITHUB_WORKSPACE/legend/releases/)
+                    
           do
             echo "Treating ${release}..."
+            
+            if $release > "2022-04-01"
+            then
+              echo "Release ${release} is OLDER"
+            else
+              echo "Release ${release} is NEWER"
+            fi
+              
             # If the current release was already published, skip it.
             echo Does release-${release} exist? $(git show-ref --verify --quiet "refs/heads/release-${release}")
             if git show-ref --verify --quiet "refs/heads/release-${release}"
