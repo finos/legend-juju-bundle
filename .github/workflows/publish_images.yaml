@@ -75,13 +75,10 @@ jobs:
           for release in $(ls $GITHUB_WORKSPACE/legend/releases/)
                     
           do
-            echo "Treating ${release}..."
-            
-            echo $(date +%Y-%m-%d -d "yesterday")
-            
-            if [[ "$release" == $(date +%Y-%m-%d -d "yesterday") ]] ;          
+          
+            if [[ "$release" == $(date +%Y-%m-%d -d "yesterday") ] || ["$release" == "2022-05-05"]] ;          
             then
-              echo "Release ${release} is from YESTERDAY"
+              echo "Release ${release} is from YESTERDAY and will be uploaded to Charmhub"
             else
               echo "Release ${release} is OLD"
               continue
