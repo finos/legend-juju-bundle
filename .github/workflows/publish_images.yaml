@@ -70,17 +70,14 @@ jobs:
             charmcraft release "${charm_name}" --revision=${charm_rev} --channel=edge --resource="${charm_resource}:${img_rev}"
           }
 
-          # Treat releases newer than 2022.04.01.
-          # for release in $(ls $GITHUB_WORKSPACE/legend/releases/ | gawk '{ if ($1 > "2022-04-01") { print } }')
           for release in $(ls $GITHUB_WORKSPACE/legend/releases/)
                     
           do
-          
-            if [[ "$release" == $(date +%Y-%m-%d -d "yesterday") || "$release" == "2022-05-05" ]];          
+            # If there was a new Legend release yesterday, release it to Charmhub
+            if [[ "$release" == $(date +%Y-%m-%d -d "yesterday") ]];          
             then
               echo "Release ${release} is from YESTERDAY and will be uploaded to Charmhub"
             else
-              echo "Release ${release} is OLD"
               continue
             fi
 
