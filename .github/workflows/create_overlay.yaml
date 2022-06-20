@@ -44,40 +44,36 @@ jobs:
           fetch-depth: 0
           clean: false
 
-      - name: Install dependencies
-        run: |
-          sudo snap install charmcraft --classic
-
       - name: Update bundle.yaml
         run: |
           echo "  legend-studio:"
           echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/edge"
           echo "    resources:"
-          echo "      studio-image: ${{ github.event.inputs.studio_image }}" 
+          echo "      studio-image: ${{ github.event.inputs.studio-image }}" 
           
           # Create an overlay yaml file with the desired release version for Legend Engine,
           # SDLC, and Studio, and apply it over the bundle.yaml file.
-          overlay_file="overlay-$${{ github.event.inputs.release }}.yaml"
+          overlay_file="overlay-${{ github.event.inputs.release }}.yaml"
           echo "applications:" > $overlay_file
           echo "  legend-engine:" >> $overlay_file
           echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/edge" >> $overlay_file
           echo "    resources:" >> $overlay_file
-          echo "      engine-image: ${{ github.event.inputs.engine_image }}" >> $overlay_file
+          echo "      engine-image: ${{ github.event.inputs.engine-image }}" >> $overlay_file
           echo "  legend-sdlc:" >> $overlay_file
           echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/edge" >> $overlay_file
           echo "    resources:" >> $overlay_file
-          echo "      sdlc-image: ${{ github.event.inputs.sdlc_image }}" >> $overlay_file
+          echo "      sdlc-image: ${{ github.event.inputs.sdlc-image }}" >> $overlay_file
           echo "  legend-studio:" >> $overlay_file
           echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/edge" >> $overlay_file
           echo "    resources:" >> $overlay_file
-          echo "      studio-image: ${{ github.event.inputs.studio_image }}" >> $overlay_file
+          echo "      studio-image: ${{ github.event.inputs.studio-image }}" >> $overlay_file
 
       - name: Create commit
         uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
         with:
           # The arguments for the `git add` command (see the paragraph below for more info)
           # Default: '.'
-          add: 'overlay-$${{ github.event.inputs.release }}.yaml'
+          add: 'overlay-${{ github.event.inputs.release }}.yaml'
 
           # The name of the user that will be displayed as the author of the commit.
           # Default: depends on the default_author input
