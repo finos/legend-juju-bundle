@@ -13,22 +13,22 @@ applications:
 
   legend-db:
     charm: "finos-legend-db-k8s"
-    channel: "stable"
+    channel: "2022-04/edge"
     scale: 1
 
   legend-sdlc:
     charm: "finos-legend-sdlc-k8s"
-    channel: "stable"
+    channel: "2022-04/edge"
     scale: 1
 
   legend-engine:
     charm: "finos-legend-engine-k8s"
-    channel: "stable"
+    channel: "2022-04/edge"
     scale: 1
 
   legend-studio:
     charm: "finos-legend-studio-k8s"
-    channel: "stable"
+    channel: "2022-04/edge"
     scale: 1
 
   gitlab-integrator:
