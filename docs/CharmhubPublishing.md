@@ -9,7 +9,7 @@ charmcraft login --export=secrets-legend.auth \
   --charm=finos-legend-engine-k8s --charm=finos-legend-sdlc-k8s \
   --charm=finos-legend-studio-k8s --bundle=finos-legend-bundle \
   --permission=package-manage --permission=package-view-revisions \
-  --ttl=1576800
+  --ttl=15780000
 ```
 
 This token will have to be updated periodically since it has a certain time to live set.
