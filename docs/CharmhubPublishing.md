@@ -12,7 +12,7 @@ charmcraft login --export=secrets-legend.auth \
   --ttl=15780000
 ```
 
-This token will have to be updated periodically since it has a certain time to live set.
+This token will have to be updated periodically since it has a certain time to live set. If the `charmcraft` process fails with the message "Provided credentials are no longer valid for Charmhub. Regenerate them and try again.", it means you have to export the secrets again by logging in to charmcraft using the instructions written above. 
 
 By using the following `gh` commands you can skip going through each of the repositories settings to set the secret token: 
 
