@@ -11,7 +11,7 @@ jobs:
     name: Publish Legend Images
     runs-on: ubuntu-20.04
     env:
-      CHARMCRAFT_AUTH: "${{ secrets.CHARMCRAFT_AUTH }}"
+      CHARMCRAFT_AUTH: "${{ secrets.CHARMHUB_TOKEN }}"
       GH_TOKEN: "${{ secrets.GH_TOKEN }}"
     steps:
       - name: Checkout
