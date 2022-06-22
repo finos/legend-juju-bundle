@@ -80,7 +80,7 @@ jobs:
         # TODO: replace with  canonical/charming-actions/upload-bundle once the following issue
         # is resolved: https://github.com/canonical/charming-actions/issues/40
         env:
-          CHARMCRAFT_AUTH: "${{ secrets.CHARMCRAFT_AUTH }}"
+          CHARMCRAFT_AUTH: "${{ secrets.CHARMHUB_TOKEN }}"
         run: |
           charmcraft pack
           charmcraft whoami
