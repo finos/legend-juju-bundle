@@ -8,6 +8,7 @@ This action requires the ``CHARMCRAFT_AUTH`` repository secret (Settings > Secre
 charmcraft login --export=secrets-legend.auth \
   --charm=finos-legend-engine-k8s --charm=finos-legend-sdlc-k8s \
   --charm=finos-legend-studio-k8s --bundle=finos-legend-bundle \
+  --charm=finos-legend-gitlab-integrator-k8s --charm=finos-legend-db-k8s \
   --permission=package-manage --permission=package-view-revisions \
   --ttl=15780000
 ```
