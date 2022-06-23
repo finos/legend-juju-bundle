@@ -1,10 +1,12 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 
-# finos-legend-k8s-bundle
-Juju bundle for all the [FINOS Legend](https://legend.finos.org)
-[Juju](https://juju.is) Charmed operators on Kubernetes.
+# finos-legend-bundle
 
-The bundle will deploy and relate the following applications:
+Welcome to the **FINOS Legend Charm Bundle**, sometimes simply called **Legend Charm**; this component is part of the the [Legend project](legend.finos.org), hosted by [FINOS](finos.org), and provides a simple, efficient and enterprise-ready way to deploy and orchestrate a Legend instance in any type of environments, from developers workstations, up to production.
+
+The Legend Charm follows the same release cycle of the Legend platform; this means that every time a [new Legend version is released](https://github.com/finos/legend/tree/master/releases), a new version (that is, channel, version and revision) is going to be created for this bundle; the name of the (charm) channel will reflect the name of the Legend Release; at the time of writing, latest Legend release is [2022-05-05](https://github.com/finos/legend/tree/master/releases/2022-05-05), which is bundled into the bundle [channel 2022-05/edge, version `104`, revision `104`]((https://charmhub.io/finos-legend-bundle?channel=2022-05/edge); you can read more below about the [automatic release process](#Automatic-FINOS-Legend-image-updates).
+
+The bundle includes several Charms, one for each Legend component:
 * [mongodb-k8s](https://github.com/canonical/mongodb-operator)
 * [finos-legend-db-k8s](https://github.com/canonical/finos-legend-db-operator)
 * [finos-legend-gitlab-integrator-k8s](https://github.com/canonical/finos-legend-gitlab-integrator)
