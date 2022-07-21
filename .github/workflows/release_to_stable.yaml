@@ -1,0 +1,125 @@
+name: Release all FINOS Legend charms to stable
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "The release to promote from edge to stable (yyyy-mm-dd)"
+        type: string
+        required: true
+jobs:
+  release-to-stable:
+    name: Release FINOS Legend charms from edge to stable
+    runs-on: ubuntu-latest
+    env:
+      CHARMCRAFT_AUTH: "${{ secrets.CHARMHUB_TOKEN }}"
+    steps:
+      - id: release-short
+        run: |
+          # Use - as a delimiter, and get only the year and month (first 2 fields).
+          yyyy_mm=$(echo ${{ github.event.inputs.release }} | cut -d- -f1-2)
+          echo "::set-output name=yyyy_mm::$yyyy_mm"
+
+      - name: Install Dependencies
+        run: |
+          sudo snap install jq
+          sudo snap install charmcraft --classic
+
+      - name: Release charms to stable
+        run: |
+          release_short="${{ steps.release-short.outputs.yyyy_mm }}"
+
+          release_charm_to_stable(){
+            charm_name="$1"
+            charm_resource="$2"
+
+            charm_status=$(charmcraft status --format json "${charm_name}")
+            release_info=$(echo "$charm_status" | jq -r '.[].mappings[].releases[] | select(.channel == "'"$release_short"'/edge")')
+            charm_rev=$(echo "$release_info" | jq -r '.revision')
+            release_channel="$release_short"
+
+            # if we don't have release info for the specified channel, we'll use the latest edge revision
+            if [ -z "$release_info" ]; then
+              release_info=$(echo "$charm_status" | jq -r '.[].mappings[].releases[] | select(.channel == "latest/edge")')
+              charm_rev=$(echo "$release_info" | jq -r '.revision')
+              release_channel="latest"
+            fi
+
+            resource_rev=$(echo "$release_info" | jq -r '.resources[] | select(.name == "'"$charm_resource"'") | .revision')
+            # release the charm to the the corresponding stable channel with the same charm revision and the same charm resource revision
+            charmcraft release "${charm_name}" --revision=${charm_rev} --channel="${release_channel}/stable" --resource="${charm_resource}:${resource_rev}" --verbose
+          }
+
+          charmcraft whoami
+
+          release_charm_to_stable finos-legend-sdlc-k8s sdlc-image
+          release_charm_to_stable finos-legend-engine-k8s engine-image
+          release_charm_to_stable finos-legend-studio-k8s studio-image
+          release_charm_to_stable finos-legend-gitlab-integrator-k8s legend-gitlab-noop-image
+          release_charm_to_stable finos-legend-db-k8s legend-db-image
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: "edge"
+          fetch-depth: 0
+
+      - name: Update bundle.yaml
+        run: |
+          # Create an overlay yaml file with the desired release version for Legend Engine,
+          # SDLC, DB, Gitlab Integrator and Studio, and apply it over the bundle.yaml file.
+          echo "applications:" > overlay.yaml
+          echo "  legend-db:" >> overlay.yaml
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/stable" >> overlay.yaml
+          echo "  legend-sdlc:" >> overlay.yaml
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/stable" >> overlay.yaml
+          echo "  legend-engine:" >> overlay.yaml
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/stable" >> overlay.yaml
+          echo "  legend-studio:" >> overlay.yaml
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/stable" >> overlay.yaml
+          echo "  gitlab-integrator:" >> overlay.yaml
+          echo "    channel: ${{ steps.release-short.outputs.yyyy_mm }}/stable" >> overlay.yaml
+
+          # We can't have bundle.yaml as both the source and destionation, the result will not be
+          # as we would have wanted it.
+          cp bundle.yaml bundle2.yaml
+          yq eval-all '. as $item ireduce ({}; . *+ $item)' bundle2.yaml overlay.yaml > bundle.yaml
+
+          cat bundle.yaml
+
+      - name: Create branch and commit for bundle
+        uses: EndBug/add-and-commit@v9 # You can change this to use a specific version.
+        with:
+          # The arguments for the `git add` command (see the paragraph below for more info)
+          # Default: '.'
+          add: "bundle.yaml"
+
+          # The name of the user that will be displayed as the author of the commit.
+          # Default: depends on the default_author input
+          author_name: Sergiu Miclea
+
+          # The email of the user that will be displayed as the author of the commit.
+          # Default: depends on the default_author input
+          author_email: smiclea@cloudbasesolutions.com
+
+          # Additional arguments for the git commit command. The --message argument is already set by the message input.
+          # Default: ''
+          commit: --signoff
+
+          # The message for the commit.
+          # Default: 'Commit from GitHub Actions (name of the workflow)'
+          message: "Create ${{ github.event.inputs.release }}/stable release"
+
+          # If this input is set, the action will push the commit to a new branch with this name.
+          # Default: ''
+          new_branch: "release-${{ github.event.inputs.release }}-stable"
+
+      - name: Upload bundle to stable
+        run: |
+          charmcraft pack
+          charmcraft whoami
+          charmcraft upload finos-legend-bundle.zip --verbose
+
+          # Get the last revision number and release.
+          bundle_rev=$(charmcraft revisions finos-legend-bundle | awk 'FNR == 2 {print $1}')
+          charmcraft release finos-legend-bundle --revision=${bundle_rev} --channel="${{ steps.release-short.outputs.yyyy_mm }}/stable" --verbose
