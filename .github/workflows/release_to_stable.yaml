@@ -1,0 +1,41 @@
+name: Release all FINOS Legend charms to stable
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release-to-stable:
+    name: Release FINOS Legend charms to stable
+    runs-on: ubuntu-latest
+    env:
+      CHARMCRAFT_AUTH: "${{ secrets.CHARMHUB_TOKEN }}"
+    steps:
+      - run: |
+          set -x
+
+          release_charm_to_stable(){
+            charm_name="$1"
+            charm_resource="$2"
+
+            # get the last charm revision number
+            charm_rev=$(charmcraft revisions "${charm_name}" | awk 'FNR == 2 {print $1}')
+
+            if [ -n "$charm_resource" ]; then
+              # if we have a charm resource (this means charm is not the bundle), we get its revision
+              img_rev=$(charmcraft resource-revisions "${charm_name}" "${charm_resource}" | awk 'FNR == 2 {print $1}')
+              # release the charm to the latest stable channel with the the latest revision and the latest charm resource revision
+              charmcraft release "${charm_name}" --revision=${charm_rev} --channel=stable --resource="${charm_resource}:${img_rev}" --verbose
+            else
+              # release the bundle to the latest stable channel
+              charmcraft release "${charm_name}" --revision=${charm_rev} --channel=stable --verbose
+            fi
+          }
+
+          charmcraft whoami
+
+          release_charm_to_stable finos-legend-bundle
+          release_charm_to_stable finos-legend-sdlc-k8s sdlc-image
+          release_charm_to_stable finos-legend-engine-k8s engine-image
+          release_charm_to_stable finos-legend-studio-k8s studio-image
+          release_charm_to_stable finos-legend-gitlab-integrator-k8s legend-gitlab-noop-image
+          release_charm_to_stable finos-legend-db-k8s legend-db-image
