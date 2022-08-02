@@ -2,6 +2,7 @@
 [![Renew the CA-verified Certificate](https://github.com/finos/legend-integration-juju/actions/workflows/renew_certificate.yaml/badge.svg)](https://github.com/finos/legend-integration-juju/actions/workflows/renew_certificate.yaml)
 [![Publish Legend Images](https://github.com/finos/legend-juju-bundle/actions/workflows/publish_images.yaml/badge.svg)](https://github.com/finos/legend-juju-bundle/actions/workflows/publish_images.yaml)
 [![Create FINOS Legend release branch](https://github.com/finos/legend-juju-bundle/actions/workflows/create_release.yaml/badge.svg)](https://github.com/finos/legend-juju-bundle/actions/workflows/create_release.yaml)
+[![Refresh EKS Environment](https://github.com/finos/legend-integration-juju/actions/workflows/scheduled.yaml/badge.svg)](https://github.com/finos/legend-integration-juju/actions/workflows/scheduled.yaml)
 
 # finos-legend-bundle
 
