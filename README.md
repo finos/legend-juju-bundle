@@ -1,4 +1,7 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
+[![Renew the CA-verified Certificate](https://github.com/finos/legend-integration-juju/actions/workflows/renew_certificate.yaml/badge.svg)](https://github.com/finos/legend-integration-juju/actions/workflows/renew_certificate.yaml)
+[![Publish Legend Images](https://github.com/finos/legend-juju-bundle/actions/workflows/publish_images.yaml/badge.svg)](https://github.com/finos/legend-juju-bundle/actions/workflows/publish_images.yaml)
+[![Create FINOS Legend release branch](https://github.com/finos/legend-juju-bundle/actions/workflows/create_release.yaml/badge.svg)](https://github.com/finos/legend-juju-bundle/actions/workflows/create_release.yaml)
 
 # finos-legend-bundle
 
