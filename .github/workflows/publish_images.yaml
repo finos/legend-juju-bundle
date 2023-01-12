@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     # Runs everyday at 00:00. (see https://crontab.guru)
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   publish-images:
@@ -110,3 +110,15 @@ jobs:
              -f sdlc-image="finos/legend-sdlc-server:${sdlc_version}" \
              -f studio-image="finos/legend-studio:${studio_version}"
           done
+      - name: Send Email on Failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: ${{ secrets.EMAIL_SERVER }}
+          server_port: ${{ secrets.EMAIL_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "${{ github.job }} job of ${{ github.repository }} has failed"
+          body: "${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
