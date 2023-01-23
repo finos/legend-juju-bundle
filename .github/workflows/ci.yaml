@@ -1,5 +1,11 @@
 name: FINOS Legend Bundle Test Jobs
-on: [pull_request, push, workflow_dispatch]
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  schedule:
+    # Runs everyday at 00:00. (see https://crontab.guru)
+    - cron: "0 0 * * *"
 
 jobs:
   lint:
@@ -37,3 +43,16 @@ jobs:
       - name: Run integration tests
         run: |
           tox -vve integration
+
+      - name: Send email on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: ${{ secrets.EMAIL_SERVER }}
+          server_port: ${{ secrets.EMAIL_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "${{ github.job }} job of ${{ github.repository }} has failed"
+          body: "${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          to: ${{ secrets.EMAIL_TO }}
+          from: ${{ secrets.EMAIL_FROM }}
