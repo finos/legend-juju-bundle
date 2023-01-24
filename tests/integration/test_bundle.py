@@ -61,7 +61,7 @@ async def cli_deploy_bundle(ops_test, name):
 # is why we should retry the connection a few times.
 @tenacity.retry(
     retry=tenacity.retry_if_result(lambda x: x is False),
-    stop=tenacity.stop_after_attempt(10),
+    stop=tenacity.stop_after_attempt(15),
     wait=tenacity.wait_exponential(multiplier=1, min=5, max=30),
 )
 def check_legend_connection(app_name, url, headers=None):
@@ -128,8 +128,8 @@ async def test_config_gitlab(ops_test: pytest_plugin.OpsTest):
         "http://%s/studio/log.in/callback" % LEGEND_HOST,
     ]
 
-    assert "completed" == action.data.get("status")
-    assert expected_uris == action.data.get("results").get("result", "").split("\n")
+    assert "completed" == action.status
+    assert expected_uris == action.results.get("result", "").split("\n")
 
 
 @pytest.mark.abort_on_fail
@@ -215,5 +215,5 @@ async def test_config_another_hostname(ops_test: pytest_plugin.OpsTest):
         "http://%s/studio/log.in/callback" % ANOTHER_LEGEND_HOST,
     ]
 
-    assert "completed" == action.data.get("status")
-    assert expected_uris == action.data.get("results").get("result", "").split("\n")
+    assert "completed" == action.status
+    assert expected_uris == action.results.get("result", "").split("\n")
