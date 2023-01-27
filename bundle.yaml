@@ -51,6 +51,8 @@ applications:
     channel: "edge"
     scale: 1
     trust: true
+    options:
+      rewrite-enabled: false
 
 relations:
   # Legend DB relations:
