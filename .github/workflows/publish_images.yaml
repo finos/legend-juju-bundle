@@ -54,8 +54,8 @@ jobs:
             image="${img_name}:${img_version}"
             docker pull "${image}"
 
-            # Get the image SHA.
-            image_sha=$(docker inspect --format '{{ .Id }}' ${image})
+            # Get the image SHA. charmcraft expects it without the sha:256 prefix, so we need to cut it.
+            image_sha=$(docker inspect --format '{{ .Id }}' ${image} | cut -d: -f2)
 
             # Upload image to Charmhub. CHARMCRAFT_AUTH should be loaded in the environment, and
             # it should have sufficient permissions to push the resource.
