@@ -111,14 +111,15 @@ jobs:
              -f studio-image="finos/legend-studio:${studio_version}"
           done
       - name: Send Email on Failure
-        if: failure()
-        uses: dawidd6/action-send-mail@v2
+        if: failure() && github.event_name == 'schedule'
+        uses: vineetchoudhary/mailgun-action@master
         with:
-          server_address: ${{ secrets.EMAIL_SERVER }}
-          server_port: ${{ secrets.EMAIL_PORT }}
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
+          api-key: ${{ secrets.MAILGUN_API_KEY }}
+          domain: ${{ secrets.MAILGUN_DOMAIN }}
+          to: ${{ secrets.EMAIL_TO }}
           subject: "${{ github.job }} job of ${{ github.repository }} has failed"
           body: "${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           to: ${{ secrets.EMAIL_TO }}
           from: ${{ secrets.EMAIL_FROM }}
+      - name: Send Mail Action Response
+        run: echo "${{ steps.sendmail.outputs.response }}"
