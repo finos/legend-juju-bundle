@@ -119,7 +119,5 @@ jobs:
           to: ${{ secrets.EMAIL_TO }}
           subject: "${{ github.job }} job of ${{ github.repository }} has failed"
           body: "${{ github.job }} job in worflow ${{ github.workflow }} of ${{ github.repository }} has failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          to: ${{ secrets.EMAIL_TO }}
-          from: ${{ secrets.EMAIL_FROM }}
       - name: Send Mail Action Response
         run: echo "${{ steps.sendmail.outputs.response }}"
