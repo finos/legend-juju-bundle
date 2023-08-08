@@ -8,6 +8,7 @@ applications:
   mongodb:
     charm: "mongodb-k8s"
     channel: "edge"
+    revision: 16
     scale: 1
   legend-db:
     charm: "finos-legend-db-k8s"
