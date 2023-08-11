@@ -77,8 +77,9 @@ jobs:
            do
             echo "Treating ${release}..."
             # If the current release was already published, skip.
-            if git show-ref --verify --quiet "refs/heads/release-${release}"
+            if git show-ref --verify --quiet "refs/remotes/origin/release-${release}"
             then
+              echo "Release ${release} already exists. Skipping."
               continue
             fi
 
