@@ -1,0 +1,13 @@
+applications:
+  legend-engine:
+    channel: 2023-06/edge
+    resources:
+      engine-image: finos/legend-engine-server:4.16.1
+  legend-sdlc:
+    channel: 2023-06/edge
+    resources:
+      sdlc-image: finos/legend-sdlc-server:0.135.1
+  legend-studio:
+    channel: 2023-06/edge
+    resources:
+      studio-image: finos/legend-studio:9.60.0
