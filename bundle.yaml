@@ -2,50 +2,41 @@
 # See LICENSE file for licensing details.
 
 name: finos-legend-bundle
-
 bundle: kubernetes
-
 variables:
   external-hostname: &external-hostname "legend-host"
-
 applications:
   mongodb:
     charm: "mongodb-k8s"
     channel: "edge"
     revision: 16
     scale: 1
-
   legend-db:
     charm: "finos-legend-db-k8s"
     channel: "edge"
     scale: 1
-
   legend-sdlc:
     charm: "finos-legend-sdlc-k8s"
-    channel: "edge"
+    channel: "2023-07/edge"
     scale: 1
     options:
       external-hostname: *external-hostname
-
   legend-engine:
     charm: "finos-legend-engine-k8s"
-    channel: "edge"
+    channel: "2023-07/edge"
     scale: 1
     options:
       external-hostname: *external-hostname
-
   legend-studio:
     charm: "finos-legend-studio-k8s"
-    channel: "edge"
+    channel: "2023-07/edge"
     scale: 1
     options:
       external-hostname: *external-hostname
-
   gitlab-integrator:
     charm: "finos-legend-gitlab-integrator-k8s"
     channel: "edge"
     scale: 1
-
   legend-ingress:
     charm: "nginx-ingress-integrator"
     channel: "edge"
@@ -53,7 +44,6 @@ applications:
     trust: true
     options:
       rewrite-enabled: false
-
 relations:
   # Legend DB relations:
   - ["legend-db", "mongodb"]
