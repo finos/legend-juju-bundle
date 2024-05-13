@@ -7,7 +7,7 @@ variables:
 applications:
   mongodb:
     charm: "mongodb-k8s"
-    channel: "edge"
+    channel: "latest/edge"
     revision: 16
     scale: 1
   legend-db:
